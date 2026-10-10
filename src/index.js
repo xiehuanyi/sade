@@ -10,7 +10,7 @@ class Sade {
 		this.bin = bin;
 		this.ver = '0.0.0';
 		this.default = '';
-		this.tree = {};
+		this.tree = Object.create(null);
 		// set internal shapes;
 		this.command(ALL);
 		this.command([DEF].concat(isOne ? rest : '<command>').join(' '));

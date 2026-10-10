@@ -341,3 +341,18 @@ test('prog.parse :: lazy :: single', t => {
 
 	bar.handler.apply(null, bar.args); // manual bcuz lazy; +2 tests
 });
+
+test('prog.command :: object prototype names', t => {
+	['constructor', 'toString', 'valueOf', 'hasOwnProperty'].forEach(name => {
+		let received;
+		try {
+			let ctx = sade('bin').command(`${name} <input>`).action(input => received = input);
+			ctx.parse(['node', 'bin', name, 'hello']);
+			t.is(received, 'hello', `${name} registers and dispatches`);
+			t.throws(() => ctx.command(name), /Command already exists/, `${name} still cannot be registered twice`);
+		} catch (error) {
+			t.fail(`${name}: ${error.message}`);
+		}
+	});
+	t.end();
+});
